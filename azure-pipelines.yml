@@ -13,8 +13,8 @@ variables:
   # Web app name
   webAppName: 'testflaskapp'
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  # # Agent VM image name
+  # vmImageName: 'ubuntu-latest'
 
   # Environment name
   environmentName: 'testflaskapp'
@@ -29,8 +29,7 @@ stages:
   displayName: Build stage
   jobs:
   - job: BuildJob
-    pool:
-      vmImage: $(vmImageName)
+    pool: windows local
     steps:
     - task: UsePythonVersion@0
       inputs:
@@ -65,8 +64,7 @@ stages:
   condition: succeeded()
   jobs:
   - deployment: DeploymentJob
-    pool:
-      vmImage: $(vmImageName)
+    pool: windows local
     environment: $(environmentName)
     strategy:
       runOnce:
@@ -84,3 +82,4 @@ stages:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+              appType: webApp
